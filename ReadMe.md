@@ -13,8 +13,7 @@ Before running the ChatBot, you need to install the required dependencies. The f
 - `random`: Necessary for generating random responses.
 - `tensorflow`: Deep learning framework for building and training models.
 - `transformers`: Hugging Face's Transformers library, used for GPT-2 model loading and tokenization.
-
-
+- `Added a batfile`, that should install the required dependencies.
 ## Implementation
 The code provided in this Markdown file consists of five main sections:
 
