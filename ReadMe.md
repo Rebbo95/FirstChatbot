@@ -39,7 +39,7 @@ To run the ChatBot, simply execute the Python code provided. It will prompt you 
 Enjoy!
 
 ## to do:
-- fix the length of the generated response
+- fix the length of the generated response (Done)
 - Train more data
 -  Add more "chatbots"
 - probably something, else, still learning :)
