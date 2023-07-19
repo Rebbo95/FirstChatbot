@@ -3,7 +3,7 @@
   "bos_token_id": 50256,
   "eos_token_id": 50256,
   "transformers_version": "4.30.2",
-  "max_length": 50,
+  "max_length": 512,
   "num_return_sequences": 1,
   "do_sample": true,
   "top_p": 0.9,

@@ -78,7 +78,7 @@ class GPT2Model:
         # Load the GPT-2 model with the modified configuration
         self.gpt2_model = TFGPT2LMHeadModel.from_pretrained('gpt2', config=model_config)
 
-    def generate_response(self, message):
+    def generate_response(self, message, max_response_length=30):
         # Create a copy of the model's configuration
         config_copy = self.gpt2_model.config.__class__.from_dict(self.gpt2_model.config.to_dict())
 
@@ -88,13 +88,16 @@ class GPT2Model:
         input_ids = gpt2_tokenizer.encode(message, return_tensors='tf')
         input_length = tf.shape(input_ids)[1]
 
-        # Define the maximum length for the generated response
-        max_response_length = input_length + 50  # You can adjust the number 50 as needed
+        # Define the desired length of the completion sentence
+        desired_completion_length = 30 # Adjust this value based on your requirements
+
+        # Calculate the maximum length for the generated response
+        max_completion_length = input_length + desired_completion_length
 
         # Use the copied configuration in the generate method
         generated_output = self.gpt2_model.generate(
             input_ids,
-            max_length=max_response_length,
+            max_length=max_completion_length,
             num_return_sequences=1,
             do_sample=config_copy.do_sample,
             top_p=config_copy.top_p,
@@ -105,7 +108,18 @@ class GPT2Model:
 
         generated_text = gpt2_tokenizer.decode(generated_output[0], skip_special_tokens=True)
 
-        return generated_text
+
+        sentence_end_indices = [i for i, token in enumerate(generated_text) if token in ['.', '?', '!']] # Find the index of the last sentence-ending token ('.', '?', or '!')(that ends a sentens).
+        if sentence_end_indices:
+            last_sentence_end_index = sentence_end_indices[-1] + 1
+        else:
+
+            last_sentence_end_index = max_response_length# If no sentence-ending tokens are found, use the maximum length(if no special symbol, that ends a sentence is found, use the max lenght.
+
+        # Truncate the response to the last complete sentence
+        trimmed_response = generated_text[:last_sentence_end_index]
+
+        return trimmed_response
 
 
 # Initialize GPT2Model first
